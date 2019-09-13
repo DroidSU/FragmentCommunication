@@ -22,13 +22,18 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SimpleFragment.OnFragmentInteractionListener {
 
     private Button button;
     private boolean isFragmentOpen = false;
 
     private static final String STATE_FRAGMENT = "state_of_fragment";
+    private static final int NONE = 2;
+    private static final int YES = 1;
+    private static final int NO = 0;
+    private int radioButtonChoice = NONE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void displayFragment(){
         // Create a new instance. Get the fragment manager. Start the transaction.
-        SimpleFragment simpleFragment = SimpleFragment.newInstance();
+        SimpleFragment simpleFragment = SimpleFragment.newInstance(radioButtonChoice);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.fragment_container, simpleFragment).disallowAddToBackStack().commit();
@@ -93,5 +98,12 @@ public class MainActivity extends AppCompatActivity {
 
         button.setText(getResources().getString(R.string.open));
         isFragmentOpen = false;
+    }
+
+    @Override
+    public void onRadioButtonClick(int choice) {
+        // Keep the radio button choice to pass to the fragment
+        radioButtonChoice = choice;
+        Toast.makeText(MainActivity.this, radioButtonChoice + "", Toast.LENGTH_SHORT).show();
     }
 }
